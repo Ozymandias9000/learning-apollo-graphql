@@ -8,6 +8,14 @@ import App from '../../ui/App';
 
 const client = new ApolloClient({
   uri: Meteor.absoluteUrl('graphql'),
+  request: async (operation) => {
+    const token = Accounts._storedLoginToken();
+    operation.setContext(() => ({
+      headers: {
+        'meteor-login-token': token,
+      },
+    }));
+  },
 });
 
 const ApolloApp = () => (
